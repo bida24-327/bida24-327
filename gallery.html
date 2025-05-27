@@ -4,13 +4,437 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience Travel - Gallery</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        header {
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            transition: 0.5s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header .brand {
+            color: #1680AC;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        header .navigation {
+            display: flex;
+        }
+
+        header .navigation .navigation-items {
+            display: flex;
+            align-items: center;
+        }
+
+        header .navigation .navigation-items a {
+            position: relative;
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: 0.3s ease;
+        }
+
+        header .navigation .navigation-items a:before {
+            content: '';
+            position: absolute;
+            background: #1680AC;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            transition: 0.3s ease;
+        }
+
+        header .navigation .navigation-items a:hover:before {
+            width: 100%;
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* ===== GALLERY SECTION STYLES ===== */
+        .gallery-section {
+            padding: 120px 5% 50px 5%;
+            text-align: center;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .gallery-section h1 {
+            font-size: clamp(2em, 5vw, 3em);
+            margin-bottom: 10px;
+            color: #1680AC;
+            font-weight: 700;
+        }
+
+        .gallery-section h2 {
+            font-size: clamp(1em, 3vw, 1.3em);
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: 20px;
+            padding: 20px 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .gallery-grid img:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== MEDIA ICONS STYLES ===== */
+        .media-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .media-icons a {
+            color: #1680AC;
+            font-size: 1.8em;
+            text-decoration: none;
+            transition: 0.3s ease;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(22, 128, 172, 0.1);
+        }
+
+        .media-icons a:hover {
+            color: #fff;
+            background: #1680AC;
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER STYLES ===== */
+        footer {
+            text-align: center;
+            padding: 30px 5%;
+            background: #333;
+            color: #fff;
+            font-size: 1em;
+        }
+
+        /* ===== LIGHTBOX STYLES ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #2bdaf1;
+            transform: scale(1.2);
+        }
+
+        /* ===== RESPONSIVE BREAKPOINTS ===== */
+
+        /* Large Desktop (1200px and up) */
+        @media (min-width: 1200px) {
+            .gallery-section {
+                padding: 100px 8% 50px 8%;
+            }
+            
+            header {
+                padding: 20px 8%;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Desktop/Laptop (992px to 1199px) */
+        @media (max-width: 1199px) and (min-width: 992px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tablet (768px to 991px) */
+        @media (max-width: 991px) and (min-width: 768px) {
+            header {
+                padding: 15px 4%;
+            }
+            
+            .gallery-section {
+                padding: 80px 4% 40px 4%;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 15px;
+            }
+            
+            .gallery-grid img {
+                height: 220px;
+            }
+            
+            header .navigation .navigation-items a {
+                margin-left: 20px;
+                font-size: 0.95em;
+            }
+        }
+
+        /* Mobile Large (576px to 767px) */
+        @media (max-width: 767px) and (min-width: 576px) {
+            header {
+                padding: 12px 4%;
+            }
+            
+            header .brand {
+                font-size: 1.5em;
+            }
+            
+            header .navigation {
+                position: fixed;
+                top: -100vh;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: top 0.5s ease;
+                z-index: 1000;
+            }
+            
+            header .navigation.active {
+                top: 0;
+            }
+            
+            header .navigation .navigation-items {
+                background: #fff;
+                width: 90%;
+                max-width: 400px;
+                padding: 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            
+            header .navigation .navigation-items a {
+                color: #333;
+                font-size: 1.3em;
+                margin: 15px 0;
+                margin-left: 0;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .gallery-section {
+                padding: 80px 4% 30px 4%;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 10px;
+            }
+            
+            .gallery-grid img {
+                height: 180px;
+                border-radius: 10px;
+            }
+        }
+
+        /* Mobile Small (up to 575px) */
+        @media (max-width: 575px) {
+            header {
+                padding: 10px 3%;
+            }
+            
+            header .brand {
+                font-size: 1.3em;
+            }
+            
+            header .navigation {
+                position: fixed;
+                top: -100vh;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: top 0.5s ease;
+                z-index: 1000;
+            }
+            
+            header .navigation.active {
+                top: 0;
+            }
+            
+            header .navigation .navigation-items {
+                background: #fff;
+                width: 95%;
+                max-width: 350px;
+                padding: 30px 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            
+            header .navigation .navigation-items a {
+                color: #333;
+                font-size: 1.2em;
+                margin: 12px 0;
+                margin-left: 0;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .gallery-section {
+                padding: 100px 3% 30px 3%;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-gap: 12px;
+                padding: 15px 0;
+            }
+            
+            .gallery-grid img {
+                height: 200px;
+                border-radius: 10px;
+            }
+        }
+
+        /* Ultra-wide screens */
+        @media (min-width: 1400px) {
+            .gallery-grid {
+                max-width: 1600px;
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <a href="index.html" class="brand">Travel</a>
-        <div class="menu-btn"></div>
+        <button class="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <nav class="navigation">
             <div class="navigation-items">
                 <a href="index.html">Home</a>
@@ -21,45 +445,197 @@
             </div>
         </nav>
     </header>
-    <main>
-        <section class="gallery-section">
-            <h1>Gallery</h1>
-            <h2>Amazing most visited places</h2>
-            <div class="gallery-grid">
-                <img src="images/okapi.jpg" alt="Okapi in the Congo" />
-                <img src="images/beach2.jpg" alt="Beautiful tropical beach" />
-                <img src="images/france.jpg" alt="Eiffel Tower in Paris, France" />
-                <img src="images/spainf.jpg" alt="Spanish Flag" />
-                <img src="images/greece.jpg" alt="Santorini, Greece" />
-                <img src="images/italy.jpg" alt="Colosseum in Rome, Italy" />
-                <img src="images/1.jpg" alt="1" />
-                <img src="images/2.jpg" alt="2" />
-                <img src="images/3.jpg" alt="3" />
-                <img src="images/4.jpg" alt="4" />
-                <img src="images/5.jpg" alt="5" />
-                <img src="images/6.jpg" alt="6" />
-                <img src="images/tour.jpg" alt="8" />
-                <img src="images/traffic.jpg" alt="9" />
-                <img src="images/emple.jpg" alt="temple" />
-                <img src="images/mural.jpg" alt="11" />
-                <img src="images/17.jpg" alt="12" />
-                <img src="images/16.jpg" alt="13" />
-                <img src="images/11.jpg" alt="11" />
-                <img src="images/13.jpg" alt="13" />
-            </div>
-             <div class="media-icons">
+
+    <section class="gallery-section">
+        <h1>Gallery</h1>
+        <h2>Amazing most visited places</h2>
+        <div class="gallery-grid">
+            <img src="images/okapi.jpg" alt="Okapi in the Congo"/>
+            <img src="images/beach2.jpg" alt="Beautiful tropical beach" />
+            <img src="images/france.jpg" alt="Eiffel Tower in Paris, France" />
+            <img src="images/spainf.jpg" alt="Spanish Flag" />
+            <img src="images/greece.jpg" alt="Santorini, Greece" />
+            <img src="images/italy.jpg" alt="Colosseum in Rome, Italy" />
+            <img src="images/1.jpg" alt="Mountain landscape" />
+            <img src="images/2.jpg" alt="City skyline" />
+            <img src="images/3.jpg" alt="Forest trail" />
+            <img src="images/4.jpg" alt="Desert landscape" />
+            <img src="images/5.jpg" alt="Ocean view" />
+            <img src="images/6.jpg" alt="Cultural site" />
+            <img src="images/tour.jpg" alt="Tour destination" />
+            <img src="images/traffic.jpg" alt="Urban scene" />
+            <img src="images/emple.jpg" alt="Historic temple" />
+            <img src="images/mural.jpg" alt="Street art" />
+            <img src="images/17.jpg" alt="Scenic view" />
+            <img src="images/16.jpg" alt="Travel destination" />
+            <img src="images/11.jpg" alt="Adventure spot" />
+            <img src="images/13.jpg" alt="Natural wonder" />
+        </div>
+        
+        <div class="media-icons">
             <a href="#"><i class="fab fa-tiktok"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-whatsapp"></i></a>
         </div>
-        </section>
-        <script type="text/javascript">
-          </script>
-    </main>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <div class="lightbox-content">
+            <span class="close-btn">&times;</span>
+            <img class="lightbox-img" src="" alt="">
+        </div>
+    </div>
+
     <footer>
-        <p> @Travel Inspire| Travel smarter</p>
+        <p>&copy; Travel Inspire | Travel smarter</p>
     </footer>
-    <script src="travel.js">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Mobile menu functionality
+            const menuBtn = document.querySelector('.menu-btn');
+            const navigation = document.querySelector('.navigation');
+            
+            if (menuBtn && navigation) {
+                menuBtn.addEventListener('click', function() {
+                    navigation.classList.toggle('active');
+                    menuBtn.classList.toggle('active');
+                });
+                
+                // Close menu when clicking on navigation links
+                const navLinks = document.querySelectorAll('.navigation-items a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navigation.classList.remove('active');
+                        menuBtn.classList.remove('active');
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!navigation.contains(e.target) && !menuBtn.contains(e.target)) {
+                        navigation.classList.remove('active');
+                        menuBtn.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Gallery lightbox functionality
+            const galleryImages = document.querySelectorAll('.gallery-grid img');
+            const lightbox = document.querySelector('.lightbox');
+            const lightboxImg = document.querySelector('.lightbox-img');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            // Add click event to gallery images
+            galleryImages.forEach(img => {
+                img.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    lightbox.style.display = 'flex';
+                    lightboxImg.src = this.src;
+                    lightboxImg.alt = this.alt;
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                });
+            });
+            
+            // Close lightbox events
+            closeBtn.addEventListener('click', function() {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            });
+            
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Restore scrolling
+                }
+            });
+            
+            // Close lightbox with escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+                    lightbox.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Restore scrolling
+                }
+            });
+            
+            // Add scroll effect to header
+            let lastScrollTop = 0;
+            const header = document.querySelector('header');
+            
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    // Scrolling down
+                    header.style.transform = 'translateY(-100%)';
+                } else {
+                    // Scrolling up
+                    header.style.transform = 'translateY(0)';
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+            
+            // Add loading animation for images
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    this.style.opacity = '1';
+                });
+                
+                // Set initial opacity for smooth loading
+                img.style.opacity = '0';
+                img.style.transition = 'opacity 0.3s ease';
+                
+                // If image is already loaded (cached)
+                if (img.complete) {
+                    img.style.opacity = '1';
+                }
+            });
+            
+            // Add hover effects to social media icons
+            const mediaIcons = document.querySelectorAll('.media-icons a');
+            mediaIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.1)';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Add animation to elements on scroll
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.gallery-grid img');
+                
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Initialize animation styles
+            const elementsToAnimate = document.querySelectorAll('.gallery-grid img');
+            elementsToAnimate.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Run animation on scroll
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Run once on load
+            
+            console.log('Gallery page JavaScript loaded successfully!');
+        });
     </script>
-  </body>
+</body>
 </html>
