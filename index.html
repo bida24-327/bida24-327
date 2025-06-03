@@ -19,7 +19,7 @@
             width: 100%;
         }
 
-        /* ===== HEADER STYLES ===== */
+        /* styling of the header */
         header {
             position: fixed;
             top: 0;
@@ -114,7 +114,7 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        /* ===== HOME SECTION STYLES ===== */
+        /* HOME SECTION STYLES */
         section {
             padding: 100px 5% 50px 5%;
             min-height: 100vh;
@@ -225,7 +225,7 @@
             z-index: 0;
         }
 
-        /* ===== MOBILE RESPONSIVE STYLES ===== */
+        /* MOBILE RESPONSIVE STYLES */
 
         /* Tablet Styles (768px and below) */
         @media (max-width: 768px) {
@@ -411,10 +411,9 @@
     </section>
 
     <script>
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
             
-            // Mobile menu functionality
+            /* Mobile menu functionality */
             const menuBtn = document.querySelector('.menu-btn');
             const navigation = document.querySelector('.navigation');
             
@@ -424,7 +423,7 @@
                     navigation.classList.toggle('active');
                 });
                 
-                // Close menu when clicking on navigation links
+                /*Close menu when clicking on navigation links */
                 const navLinks = document.querySelectorAll('.navigation-items a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -433,7 +432,7 @@
                     });
                 });
                 
-                // Close menu when clicking outside
+                /* Close menu when clicking outside */
                 document.addEventListener('click', function(e) {
                     if (!navigation.contains(e.target) && !menuBtn.contains(e.target)) {
                         menuBtn.classList.remove('active');
@@ -442,7 +441,7 @@
                 });
             }
             
-            // Add scroll effect to header
+            /* scroll effect to header */
             let lastScrollTop = 0;
             const header = document.querySelector('header');
             
@@ -450,17 +449,17 @@
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
                 if (scrollTop > lastScrollTop && scrollTop > 100) {
-                    // Scrolling down
+                    /* Scrolling down */
                     header.style.transform = 'translateY(-100%)';
                 } else {
-                    // Scrolling up
+                    /* Scrolling up */
                     header.style.transform = 'translateY(0)';
                 }
                 
                 lastScrollTop = scrollTop;
             });
             
-            // Add hover effects to social media icons
+            /* hover effects to social media icons */
             const mediaIcons = document.querySelectorAll('.media-icons a');
             mediaIcons.forEach(icon => {
                 icon.addEventListener('mouseenter', function() {
@@ -472,10 +471,10 @@
                 });
             });
             
-            // Video controls for better performance
+            /* Video controls for better performance */
             const videos = document.querySelectorAll('video');
             videos.forEach(video => {
-                // Pause video when not in viewport
+                /* Pause video when not in viewport */
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
